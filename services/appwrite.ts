@@ -19,7 +19,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
 
         if (result.documents.length > 0) {
             const existingMovie = result.documents[0];
-            console.log("Existing movie!")
 
             await database.updateDocument(
                 DATABASE_ID,
@@ -29,7 +28,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
                 }
             )
         } else {
-            console.log("Creating new doc!")
             await database.createDocument(
                 DATABASE_ID,
                 COLLECTION_ID,

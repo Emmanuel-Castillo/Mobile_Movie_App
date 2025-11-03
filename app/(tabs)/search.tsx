@@ -10,7 +10,6 @@ import {useEffect, useState} from "react";
 import {updateSearchCount} from "@/services/appwrite";
 
 const Search = () => {
-    const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
     const {
         data: movies,
@@ -18,11 +17,11 @@ const Search = () => {
         error: moviesError,
         refetch: loadMovies,
         reset
-    } = useFetch(() => fetchMovies({query: searchQuery}), false)
+    } = useFetch(() => fetchMovies({query: searchQuery}), false) // NO auto-fetching
 
     useEffect(() => {
-
-        // Debouncing api call
+        // Debouncing api call when searchQuery changes
+        // Only invoke callback after .5 seconds
         const timeoutId = setTimeout(async () => {
             if (searchQuery.trim()) {
                 await loadMovies();
@@ -34,6 +33,7 @@ const Search = () => {
         return () => clearTimeout(timeoutId);
     }, [searchQuery]);
 
+    // Call Appwrite to update search count for searchQuery
     useEffect(() => {
         if (movies?.length > 0 && movies?.[0]) {
             updateSearchCount(searchQuery, movies[0])
